@@ -1,4 +1,5 @@
 const posts = [];
+let indexPost = -1;
 
 function savePost() {
     const title = document.getElementById("title").value;
@@ -6,13 +7,23 @@ function savePost() {
     const publisher = document.getElementById("publisher").value;
     const date = document.getElementById("date").value;
 
-    console.log(title);
-    console.log(resume);
-    console.log(publisher);
-    console.log(date);
+    if (indexPost == -1) {
+        if (title && resume && publisher && date) {
+            storePost(title, resume, publisher, date);
+        }
+    } else {
+        if (title && resume && publisher && date) {
+            posts[indexPost] = {
+                title,
+                resume,
+                publisher,
+                date
+            };
 
-    if (title && resume && publisher && date) {
-        storePost(title, resume, publisher, date);
+            showPosts();
+            indexPost = -1;
+            cleanFields();
+        }
     }
 }
 
@@ -25,14 +36,15 @@ function storePost(title, resume, publisher, date) {
     };
 
     posts.push(post);
-    showPosts();        
+    showPosts();
+    cleanFields();
 }
 
 function showPosts() {
     let showContent = '';
 
-posts.forEach((post, index) => {
-    showContent += `
+    posts.forEach((post, index) => {
+        showContent += `
     <div class="post" >
     <h2>${post.title}</h2>
     <p>  <strong>Resumo:</strong> ${post.resume} </p>
@@ -42,9 +54,26 @@ posts.forEach((post, index) => {
     <button onclick="editPost(${index})" >Editar</button>
     <button onclick="removePost(${index})" >Remover</button>
     </div>
-    `; 
-} )
+    `;
+    })
 
-document.getElementById("list").innerHTML = showContent;
+    document.getElementById("list").innerHTML = showContent;
 
+}
+
+function cleanFields() {
+    document.getElementById("title").value = '';
+    document.getElementById("resume").value = '';
+    document.getElementById("publisher").value = '';
+    document.getElementById("date").value = '';
+}
+
+function editPost(index) {
+    indexPost = index;
+    const post = posts[index];
+
+    document.getElementById("title").value = post.title;
+    document.getElementById("resume").value = post.resume;
+    document.getElementById("publisher").value = post.publisher;
+    document.getElementById("date").value = post.date;
 }
