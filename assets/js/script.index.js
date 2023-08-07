@@ -77,3 +77,7 @@ function editPost(index) {
     document.getElementById("publisher").value = post.publisher;
     document.getElementById("date").value = post.date;
 }
+
+function removePost(index) {
+    post
+}
